@@ -49,3 +49,8 @@ This will generate a JSON file containing the game IDs and titles.
     `scrapy crawl steam_spider -O steam.csv`
 
 This spider will read the steam_id.csv file and retrieve detailed information for each game.
+
+### NOTES 
+
+- current version of the spider is able to get 3000 games , because the ids are including bundels and dlc's, and also the spider get the first 10000 ids from the search page, to change the number of ids you can change the value of the variable `max_games` in the `steam_spider.py` file, or just remove it from `games_list` to include all games 
+- there are some errors in the spider (get `502` error) which can be solved by changing the `CONCURRENT_REQUESTS` value in the `settings.py` file to `1` or `2` , and also you can change the `DOWNLOAD_DELAY` value to `1` or `2` to avoid the error but that will make the spider extremely slow

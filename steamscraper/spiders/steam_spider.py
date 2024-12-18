@@ -4,6 +4,7 @@ from scrapy.http import FormRequest
 import pandas as pd
 import re
 import logging
+import glob
 
 
 class SteamSpider(Spider):
@@ -11,17 +12,19 @@ class SteamSpider(Spider):
 
     name = 'steam_spider'
     allowed_urls = ['https://store.steampowered.com']
-    start_urls = ['https://store.steampowered.com/app/10/CounterStrike/']
+    start_urls = ['https://store.steampowered.com/search/?category1=998' +
+                  '&supportedlang=english']
     timeout_urls = 'timeout_urls.list'
     cur_tag_index_pair = 0
 
     def parse(self, response):
         """Parse the initial response and generate requests for game details."""
         path = "./steam_id.csv"
+        max_games = 10000
         game_list = pd.read_csv(path, usecols=['steam_appid']).squeeze("columns")
-        game_list = game_list[:2]
+        game_list = game_list[:max_games]
         for index, game in game_list.items():
-            game_id = game
+            game_id = int(float(game))
             detail_url = f"https://store.steampowered.com/app/{game_id}"
 
             # Skip entries that point to bundles
